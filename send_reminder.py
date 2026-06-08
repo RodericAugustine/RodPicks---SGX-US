@@ -21,10 +21,16 @@ from datetime import date, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# ── Config ─────────────────────────────────────────────────────────────────────
-GMAIL_ADDRESS   = "YOUR_EMAIL@gmail.com"
-GMAIL_APP_PASSWORD = os.environ.get("RodPicks_EMAIL_PASS", "your-app-password-here")
-TO_ADDRESS      = "YOUR_EMAIL@gmail.com"
+# ── Config (set both env vars before running) ──────────────────────────────────
+GMAIL_ADDRESS      = os.environ.get("RODPICKS_EMAIL", "")        # your Gmail address
+GMAIL_APP_PASSWORD = os.environ.get("RodPicks_EMAIL_PASS", "")   # Gmail App Password
+TO_ADDRESS         = os.environ.get("RODPICKS_EMAIL", "")        # recipient (same address)
+
+if not GMAIL_ADDRESS or not GMAIL_APP_PASSWORD:
+    print("❌ Missing env vars. Set both before running:")
+    print("   [System.Environment]::SetEnvironmentVariable('RODPICKS_EMAIL','you@gmail.com','User')")
+    print("   [System.Environment]::SetEnvironmentVariable('RodPicks_EMAIL_PASS','your-app-password','User')")
+    sys.exit(1)
 # ──────────────────────────────────────────────────────────────────────────────
 
 def tomorrow_is_first() -> bool:
@@ -104,14 +110,4 @@ def send_reminder():
             server.sendmail(GMAIL_ADDRESS, TO_ADDRESS, msg.as_string())
         print(f"✅ Reminder sent to {TO_ADDRESS} — rebalance date: {day_str}")
     except smtplib.SMTPAuthenticationError:
-        print("❌ Authentication failed. Check your Gmail App Password.")
-        print("   → https://myaccount.google.com/apppasswords")
-    except Exception as e:
-        print(f"❌ Failed to send email: {e}")
-
-
-if __name__ == "__main__":
-    if not tomorrow_is_first():
-        print(f"⏭️  Skipping — tomorrow is not the 1st (today is {date.today()}). No email sent.")
-        sys.exit(0)
-    send_reminder()
+        print("❌ Authentication failed. Check your Gmai

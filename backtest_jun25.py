@@ -1,7 +1,7 @@
 """
 RodPicks 3-Month Backtest — Jun 2025 to Aug 2025
 =============================================
-Starting capital: SGD S$35,000 (SGX) + USD US$40,000 (US)
+Starting capital: SGD S$40,000 (SGX) + USD US$40,000 (US)
 SGX lot size: floor to nearest 100 shares per stock
 Tracks monthly P&L, margin usage, and cumulative summary.
 

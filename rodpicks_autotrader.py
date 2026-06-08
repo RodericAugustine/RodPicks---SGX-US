@@ -34,6 +34,17 @@ import yfinance as yf
 
 warnings.filterwarnings("ignore")
 
+# ── Safety toggle ─────────────────────────────────────────────────────────────
+# Defaults to SIMULATE (paper trading). Set RODPICKS_LIVE=1 to place real orders.
+#
+#   Safe (paper):  default — no env var needed
+#   Live (real):   set env var first:
+#     [System.Environment]::SetEnvironmentVariable('RODPICKS_LIVE','1','User')
+#
+from futu import TrdEnv
+TRADE_ENV = TrdEnv.REAL if os.environ.get("RODPICKS_LIVE") == "1" else TrdEnv.SIMULATE
+# ─────────────────────────────────────────────────────────────────────────────
+
 # ── Config ────────────────────────────────────────────────────────────────────
 OPEND_HOST      = "127.0.0.1"
 OPEND_PORT      = 11111
@@ -132,10 +143,9 @@ def get_moomoo(market):
     return q, t
 
 def get_acc(t):
-    from futu import TrdEnv
     ret, lst = t.get_acc_list()
     if ret != 0: return None
-    p = lst[lst["trd_env"] == TrdEnv.REAL]
+    p = lst[lst["trd_env"] == TRADE_ENV]
     return int(p.iloc[0]["acc_id"]) if not p.empty else None
 
 def get_cash(t, acc):
@@ -143,7 +153,7 @@ def get_cash(t, acc):
     Account base currency is HKD but all trading capital is held in USD.
     SGX trades auto-convert USD→SGD at execution.
     """
-    ret, info = t.accinfo_query(trd_env=__import__("futu").TrdEnv.REAL, acc_id=acc)
+    ret, info = t.accinfo_query(trd_env=TRADE_ENV, acc_id=acc)
     if ret != 0: return 0
     # Prefer us_cash (explicit USD wallet); fall back to cash if not present
     if "us_cash" in info.columns:
@@ -157,13 +167,13 @@ def get_price_live(q, code):
     return float(p) if p else None
 
 def place(t, acc, code, side, price, qty, market):
-    from futu import TrdSide, OrderType, TrdEnv
+    from futu import TrdSide, OrderType
     mult = 1.01 if side == TrdSide.BUY else 0.99
     dp   = 3 if market == "SG" else 2
     ret, data = t.place_order(
         price=round(price * mult, dp), qty=qty, code=code,
         trd_side=side, order_type=OrderType.NORMAL,
-        trd_env=TrdEnv.REAL, acc_id=acc
+        trd_env=TRADE_ENV, acc_id=acc
     )
     return (ret == 0, data["order_id"].iloc[0] if ret == 0 else str(data))
 
@@ -304,7 +314,7 @@ def open_positions(dry_run=False, market="BOTH"):
             q_sg, t_sg = get_moomoo("SG")
             acc_sg     = get_acc(t_sg)
             cash_usd   = get_cash(t_sg, acc_sg) if acc_sg else 0
-            # SGX capital required in USD terms (S$35,000 ÷ SGD_USD_RATE)
+            # SGX capital required in USD terms (SGX_CAPITAL ÷ SGD_USD_RATE)
             sgx_required_usd = SGX_CAPITAL * SGD_USD_RATE
             shortfall  = max(0, sgx_required_usd - cash_usd)
 
@@ -591,7 +601,7 @@ def generate_report(results, close_date):
   .note{{color:#475569;font-size:0.7rem;margin-top:8px}}
 </style></head><body>
 <h1>RodPicks Monthly P&L Report</h1>
-<p class="sub">Period close: {close_date} &nbsp;·&nbsp; SGX top 3 (S$30k) + US top 5 (US$50k) &nbsp;·&nbsp; Paper trading</p>
+<p class="sub">Period close: {close_date} &nbsp;·&nbsp; SGX top 3 (S${SGX_CAPITAL//1000:.0f}k) + US top 5 (US${US_CAPITAL//1000:.0f}k)</p>
 <div class="grid">
   <div class="card"><div class="l">SGX net</div>
     <div class="v" style="color:{'#4ade80' if sgx_net>=0 else '#f87171'}">S${sgx_net:+,.2f}</div></div>
@@ -600,7 +610,7 @@ def generate_report(results, close_date):
   <div class="card"><div class="l">Combined (SGD)</div>
     <div class="v" style="color:{'#4ade80' if combined>=0 else '#f87171'}">S${combined:+,.2f}</div></div>
   <div class="card"><div class="l">Total capital</div>
-    <div class="v">S$30k + US$50k</div></div>
+    <div class="v">S${SGX_CAPITAL//1000:.0f}k + US${US_CAPITAL//1000:.0f}k</div></div>
 </div>
 <h2>SGX Positions</h2>
 <table><thead><tr><th>Ticker</th><th>Shares</th><th>Buy</th><th>Sell</th>
@@ -653,7 +663,9 @@ def show_status():
 
 # ── Backtest (1st of month cycle) ────────────────────────────────────────────
 
-def run_backtest(start_str: str, end_str: str, capital_sgx=30_000, capital_us=50_000):
+def run_backtest(start_str: str, end_str: str, capital_sgx=None, capital_us=None):
+    if capital_sgx is None: capital_sgx = SGX_CAPITAL
+    if capital_us  is None: capital_us  = US_CAPITAL
     """
     Backtest for a specific 15th→14th period.
     Uses actual historical prices for momentum (genuinely historical).
@@ -812,22 +824,6 @@ def run_backtest(start_str: str, end_str: str, capital_sgx=30_000, capital_us=50
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description="RodPicks AutoTrader")
-    p.add_argument("--rebalance", action="store_true", help="Close existing + open new picks (monthly 1st)")
-    p.add_argument("--market",    type=str, default="BOTH", choices=["SGX","US","BOTH"],
-                   help="Which market to act on (default: BOTH)")
-    p.add_argument("--status",    action="store_true", help="Show current holdings")
-    p.add_argument("--dry",       action="store_true", help="Preview only, no orders placed")
-    p.add_argument("--backtest",  action="store_true", help="Run backtest")
-    p.add_argument("--start",     type=str, default="2026-01-01", help="Backtest open date")
-    p.add_argument("--end",       type=str, default="2026-01-31", help="Backtest close date")
-    args = p.parse_args()
-
-    if args.backtest:
-        run_backtest(args.start, args.end)
-    elif args.rebalance:
-        rebalance_positions(dry_run=args.dry, market=args.market)
-    elif args.status:
-        show_status()
-    else:
-        p.print_help()
+    # ── Mode banner — shown every run so you always know which env is active ──
+    if TRADE_ENV == TrdEnv.REAL:
+      

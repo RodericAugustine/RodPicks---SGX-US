@@ -48,8 +48,9 @@ pip install futu-api yfinance pandas numpy
 
 ### 2. Configure Gmail reminder
 - Create an App Password at https://myaccount.google.com/apppasswords
-- Set environment variable:
+- Set both environment variables:
 ```powershell
+[System.Environment]::SetEnvironmentVariable('RODPICKS_EMAIL','you@gmail.com','User')
 [System.Environment]::SetEnvironmentVariable('RodPicks_EMAIL_PASS','your-app-password','User')
 ```
 - Test: `python test_email.py`
@@ -76,5 +77,4 @@ SGX trades fund via USD auto-conversion. Ensure sufficient USD balance before th
 
 ## Notes
 - Paper trading: change `TrdEnv.REAL` to `TrdEnv.SIMULATE` in `rodpicks_autotrader.py`
-- SGX lot size: floored to nearest 100 shares
-- Margin account bridges T+1/T+2 settlement gap on rebalance day
+- SGX lot size: flo

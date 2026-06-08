@@ -43,7 +43,7 @@ Dry run: scores and ranks stocks for both markets, prints the picks and estimate
 `python send_reminder.py`
 
 - Script checks if tomorrow is the 1st — if not, exits silently
-- If yes, sends an HTML email to YOUR_EMAIL@gmail.com with:
+- If yes, sends an HTML email to the address in RODPICKS_EMAIL env var with:
   - Checklist: launch Moomoo OpenD, log in, keep PC on overnight
   - Day's schedule: 8am signal, 9:05am SGX trade, 9:35pm US trade
   - Capital balances to confirm
