@@ -1,5 +1,5 @@
 """
-HC15 AutoTrader — Moomoo OpenD Connection Test
+RodPicks AutoTrader — Moomoo OpenD Connection Test
 ===============================================
 Run this to verify your OpenD desktop app is running and reachable.
 Shows connected accounts, balances, and current positions.
@@ -37,7 +37,7 @@ SEP  = "=" * 65
 SEP2 = "─" * 65
 
 print(f"\n{SEP}")
-print("  HC15 — Moomoo OpenD Connection Test")
+print("  RodPicks — Moomoo OpenD Connection Test")
 print(SEP)
 
 # ── 1. Quote context (market data) ───────────────────────────────────────────

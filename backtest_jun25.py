@@ -1,5 +1,5 @@
 """
-HC15 3-Month Backtest — Jun 2025 to Aug 2025
+RodPicks 3-Month Backtest — Jun 2025 to Aug 2025
 =============================================
 Starting capital: SGD S$35,000 (SGX) + USD US$40,000 (US)
 SGX lot size: floor to nearest 100 shares per stock
@@ -225,7 +225,7 @@ SEP  = "=" * 72
 SEP2 = "─" * 72
 
 print(SEP)
-print("  HC15 BACKTEST — JUN 2025 to AUG 2025  (updated allocation)")
+print("  RodPicks BACKTEST — JUN 2025 to AUG 2025  (updated allocation)")
 print(f"  SGX Capital: S${SGX_START:,.0f} (S${SGX_ALLOC:,.2f}/stock, floor to nearest 100 shares)")
 print(f"  US  Capital: US${US_START:,.0f} (US${US_ALLOC:,.2f}/stock)")
 print(SEP)

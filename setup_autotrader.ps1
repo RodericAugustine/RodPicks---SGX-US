@@ -1,27 +1,27 @@
-# HC15 AutoTrader - Windows Task Scheduler Setup
+# RodPicks AutoTrader - Windows Task Scheduler Setup
 # Run once as Administrator to register all automated tasks.
 
 $Python  = (Get-Command python -ErrorAction SilentlyContinue).Source
 if (-not $Python) { Write-Host "Python not found." -ForegroundColor Red; pause; exit }
 
-$Script         = "C:\Users\vibra\Claude\Projects\iNVESTMENT\hc15_autotrader.py"
+$Script         = "C:\Users\vibra\Claude\Projects\iNVESTMENT\rodpicks_autotrader.py"
 $ReminderScript = "C:\Users\vibra\Claude\Projects\iNVESTMENT\send_reminder.py"
 $Dir            = "C:\Users\vibra\Claude\Projects\iNVESTMENT"
 
 Write-Host ""
-Write-Host "Registering HC15 AutoTrader scheduled tasks..." -ForegroundColor Cyan
+Write-Host "Registering RodPicks AutoTrader scheduled tasks..." -ForegroundColor Cyan
 
 # Connect to Task Scheduler via COM (works on all Windows versions)
 $svc = New-Object -ComObject "Schedule.Service"
 $svc.Connect()
 
-# Create \HC15\ folder if it doesn't exist
+# Create \RodPicks\ folder if it doesn't exist
 $root = $svc.GetFolder("\")
 try {
-    $folder = $svc.GetFolder("\HC15")
+    $folder = $svc.GetFolder("\RodPicks")
 } catch {
-    $root.CreateFolder("HC15") | Out-Null
-    $folder = $svc.GetFolder("\HC15")
+    $root.CreateFolder("RodPicks") | Out-Null
+    $folder = $svc.GetFolder("\RodPicks")
 }
 
 function New-MonthlyTrigger($task, $Day, $Time) {
@@ -37,7 +37,7 @@ function Make-Task($Name, $Days, $Time, $ScriptPath, $Args) {
     try { $folder.DeleteTask($Name, 0) } catch {}
 
     $task = $svc.NewTask(0)
-    $task.RegistrationInfo.Description   = "HC15 AutoTrader: $Name"
+    $task.RegistrationInfo.Description   = "RodPicks AutoTrader: $Name"
     $task.Settings.StartWhenAvailable    = $true
     $task.Settings.RunOnlyIfNetworkAvailable = $true
     $task.Settings.ExecutionTimeLimit    = "PT2H"
@@ -61,16 +61,16 @@ function Make-Task($Name, $Days, $Time, $ScriptPath, $Args) {
 }
 
 # Reminder fires on days 28, 30, 31 — Python script only sends email if tomorrow is the 1st
-Make-Task "HC15-Reminder"  @(28,30,31) "09:00" $ReminderScript ""
-Make-Task "HC15-Signal"    @(1)        "08:00" $Script "--rebalance --dry"
-Make-Task "HC15-SGX-Trade" @(1)        "09:05" $Script "--rebalance --market SGX"
-Make-Task "HC15-US-Trade"  @(1)        "21:35" $Script "--rebalance --market US"
+Make-Task "RodPicks-Reminder"  @(28,30,31) "09:00" $ReminderScript ""
+Make-Task "RodPicks-Signal"    @(1)        "08:00" $Script "--rebalance --dry"
+Make-Task "RodPicks-SGX-Trade" @(1)        "09:05" $Script "--rebalance --market SGX"
+Make-Task "RodPicks-US-Trade"  @(1)        "21:35" $Script "--rebalance --market US"
 
 Write-Host ""
-Write-Host "4 tasks registered under Task Scheduler -> HC15\" -ForegroundColor Cyan
+Write-Host "4 tasks registered under Task Scheduler -> RodPicks\" -ForegroundColor Cyan
 Write-Host "Reminder : 28th of each month at 9:00am" -ForegroundColor Cyan
 Write-Host "Rebalance: 1st of each month (SGX 9:05am, US 9:35pm SGT)" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Verify with:" -ForegroundColor Yellow
-Write-Host "  Get-ScheduledTask | Where-Object {`$_.TaskName -like 'HC15*'}" -ForegroundColor White
+Write-Host "  Get-ScheduledTask | Where-Object {`$_.TaskName -like 'RodPicks*'}" -ForegroundColor White
 pause

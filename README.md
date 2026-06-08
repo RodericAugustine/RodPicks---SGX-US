@@ -1,4 +1,4 @@
-# HC15 AutoTrader
+# RodPicks AutoTrader
 
 Automated monthly rebalancing system for SGX and US stocks using a factor-based scoring model. Connects to Moomoo via futu-api and runs on Windows Task Scheduler.
 
@@ -24,9 +24,9 @@ Buys the top 3 SGX picks (S$40,000) and top 5 US picks (US$40,000) on the 1st of
 
 | File | Purpose |
 |------|---------|
-| `hc15_autotrader.py` | Main script — scoring, execution, backtest |
-| `hc15sg_v2.py` | SGX signal generator |
-| `hc15us_v1.py` | US signal generator |
+| `rodpicks_autotrader.py` | Main script — scoring, execution, backtest |
+| `rodpicks_sg.py` | SGX signal generator |
+| `rodpicks_us.py` | US signal generator |
 | `send_reminder.py` | Monthly email reminder |
 | `setup_autotrader.ps1` | Registers Windows Task Scheduler tasks |
 | `backtest_3m.py` | Dec 2025 – Feb 2026 backtest |
@@ -50,7 +50,7 @@ pip install futu-api yfinance pandas numpy
 - Create an App Password at https://myaccount.google.com/apppasswords
 - Set environment variable:
 ```powershell
-[System.Environment]::SetEnvironmentVariable('HC15_EMAIL_PASS','your-app-password','User')
+[System.Environment]::SetEnvironmentVariable('RodPicks_EMAIL_PASS','your-app-password','User')
 ```
 - Test: `python test_email.py`
 
@@ -62,7 +62,7 @@ Run as Administrator:
 
 ### 4. Test signal
 ```
-python hc15_autotrader.py --rebalance --dry
+python rodpicks_autotrader.py --rebalance --dry
 ```
 
 ## Capital
@@ -75,6 +75,6 @@ python hc15_autotrader.py --rebalance --dry
 SGX trades fund via USD auto-conversion. Ensure sufficient USD balance before the 1st.
 
 ## Notes
-- Paper trading: change `TrdEnv.REAL` to `TrdEnv.SIMULATE` in `hc15_autotrader.py`
+- Paper trading: change `TrdEnv.REAL` to `TrdEnv.SIMULATE` in `rodpicks_autotrader.py`
 - SGX lot size: floored to nearest 100 shares
 - Margin account bridges T+1/T+2 settlement gap on rebalance day

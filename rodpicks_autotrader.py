@@ -1,5 +1,5 @@
 """
-HC15 AutoTrader — Full Automated Monthly Trading System
+RodPicks AutoTrader — Full Automated Monthly Trading System
 ========================================================
 Rebalances on the 1st of each month: sells existing positions then buys new picks.
 SGX rebalances at 9:05am SGT (market open). US rebalances at 9:35pm SGT (US market open).
@@ -12,11 +12,11 @@ Capital:
 Margin: always executes; notifies if shortfall exists.
 
 Usage:
-  python hc15_autotrader.py --rebalance --market SGX      # rebalance SGX only
-  python hc15_autotrader.py --rebalance --market US       # rebalance US only
-  python hc15_autotrader.py --rebalance --dry             # preview both, no orders
-  python hc15_autotrader.py --status                      # show current holdings
-  python hc15_autotrader.py --backtest --start 2026-01-01 --end 2026-01-31
+  python rodpicks_autotrader.py --rebalance --market SGX      # rebalance SGX only
+  python rodpicks_autotrader.py --rebalance --market US       # rebalance US only
+  python rodpicks_autotrader.py --rebalance --dry             # preview both, no orders
+  python rodpicks_autotrader.py --status                      # show current holdings
+  python rodpicks_autotrader.py --backtest --start 2026-01-01 --end 2026-01-31
 """
 
 import argparse
@@ -263,7 +263,7 @@ def open_positions(dry_run=False, market="BOTH"):
     mode     = "DRY RUN" if dry_run else "PAPER TRADE"
 
     print(f"\n{'='*62}")
-    print(f"  HC15 AutoTrader — OPEN [{mode}] [{market}]")
+    print(f"  RodPicks AutoTrader — OPEN [{mode}] [{market}]")
     print(f"  {now_str}")
     print(f"  Open date : {open_dt}  |  Next rebalance: {close_dt}")
     print(f"{'='*62}\n")
@@ -315,7 +315,7 @@ def open_positions(dry_run=False, market="BOTH"):
             else:
                 print(f"  ⚠  Shortfall   : US${shortfall:>9,.2f} ({shortfall/sgx_required_usd*100:.1f}%)")
                 print(f"  ℹ  Proceeding on margin — top up USD when possible")
-                notify("HC15 SGX — Margin Used ⚠",
+                notify("RodPicks SGX — Margin Used ⚠",
                        f"USD shortfall for SGX: US${shortfall:,.2f}\n"
                        f"(Need US${sgx_required_usd:,.0f} to cover S${SGX_CAPITAL:,.0f} SGX allocation)\n"
                        f"Moomoo will auto-convert USD→SGD. FX spread ~0.2% applies.\n"
@@ -365,7 +365,7 @@ def open_positions(dry_run=False, market="BOTH"):
             else:
                 print(f"  ⚠  Shortfall   : US${shortfall:>9,.2f} ({shortfall/US_CAPITAL*100:.1f}%)")
                 print(f"  ℹ  Proceeding on margin — top up when funds available")
-                notify("HC15 US — Margin Used ⚠",
+                notify("RodPicks US — Margin Used ⚠",
                        f"USD shortfall: US${shortfall:,.2f} ({shortfall/US_CAPITAL*100:.1f}%)\n"
                        f"Trades will execute on margin.\n"
                        f"Please top up when funds are available.")
@@ -404,7 +404,7 @@ def open_positions(dry_run=False, market="BOTH"):
         us_c  = sum(1 for t in trades if t["market"]=="US")
         print(f"  ✅ {len(trades)} positions opened — SGX:{sgx_c} | US:{us_c}")
         print(f"  Next rebalance: {close_dt}")
-        notify("HC15 Positions Opened ✅",
+        notify("RodPicks Positions Opened ✅",
                f"SGX: {sgx_c} stocks  |  US: {us_c} stocks\n"
                f"Next rebalance: {close_dt}")
     elif dry_run:
@@ -423,7 +423,7 @@ def close_positions(dry_run=False, market="BOTH"):
     trades  = log.get("open", [])
 
     print(f"\n{'='*62}")
-    print(f"  HC15 AutoTrader — CLOSE [{mode}] [{market}]")
+    print(f"  RodPicks AutoTrader — CLOSE [{mode}] [{market}]")
     print(f"  {now_str}")
     print(f"{'='*62}\n")
 
@@ -522,7 +522,7 @@ def close_positions(dry_run=False, market="BOTH"):
             "combined_sgd": round(combined,2),
         })
         save_log(full_log)
-        notify("HC15 Monthly Close ✅",
+        notify("RodPicks Monthly Close ✅",
                f"SGX: S${sgx_net:+,.2f}\n"
                f"US:  US${us_net:+,.2f} (≈S${us_net_sg:+,.2f})\n"
                f"Combined: S${combined:+,.2f}\n"
@@ -571,7 +571,7 @@ def generate_report(results, close_date):
         return out
 
     html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<title>HC15 Report — {close_date}</title>
+<title>RodPicks Report — {close_date}</title>
 <style>
   *{{box-sizing:border-box;margin:0;padding:0}}
   body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -590,7 +590,7 @@ def generate_report(results, close_date):
   td{{padding:8px 10px;border-bottom:1px solid #1e293b;color:#cbd5e1}}
   .note{{color:#475569;font-size:0.7rem;margin-top:8px}}
 </style></head><body>
-<h1>HC15 Monthly P&L Report</h1>
+<h1>RodPicks Monthly P&L Report</h1>
 <p class="sub">Period close: {close_date} &nbsp;·&nbsp; SGX top 3 (S$30k) + US top 5 (US$50k) &nbsp;·&nbsp; Paper trading</p>
 <div class="grid">
   <div class="card"><div class="l">SGX net</div>
@@ -663,7 +663,7 @@ def run_backtest(start_str: str, end_str: str, capital_sgx=30_000, capital_us=50
     end   = date.fromisoformat(end_str)
 
     print(f"\n{'='*62}")
-    print(f"  HC15 AutoTrader Backtest")
+    print(f"  RodPicks AutoTrader Backtest")
     print(f"  Open: {start}  →  Close: {end}")
     print(f"  SGX: S${capital_sgx:,}  |  US: US${capital_us:,}")
     print(f"{'='*62}\n")
@@ -812,7 +812,7 @@ def run_backtest(start_str: str, end_str: str, capital_sgx=30_000, capital_us=50
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description="HC15 AutoTrader")
+    p = argparse.ArgumentParser(description="RodPicks AutoTrader")
     p.add_argument("--rebalance", action="store_true", help="Close existing + open new picks (monthly 1st)")
     p.add_argument("--market",    type=str, default="BOTH", choices=["SGX","US","BOTH"],
                    help="Which market to act on (default: BOTH)")

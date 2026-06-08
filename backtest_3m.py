@@ -1,5 +1,5 @@
 """
-HC15 3-Month Backtest — Dec 2025 to Feb 2026
+RodPicks 3-Month Backtest — Dec 2025 to Feb 2026
 =============================================
 Starting capital: SGD S$30,000 (SGX) + USD US$75,000 (US)
 Tracks monthly P&L, margin usage, and cumulative summary.
@@ -218,7 +218,7 @@ SEP = "=" * 70
 SEP2= "─" * 70
 
 print(SEP)
-print("  HC15 BACKTEST — DEC 2025 to FEB 2026")
+print("  RodPicks BACKTEST — DEC 2025 to FEB 2026")
 print(f"  SGX Capital: S${SGX_START:,.0f}  |  US Capital: US${US_START:,.0f}")
 print(SEP)
 

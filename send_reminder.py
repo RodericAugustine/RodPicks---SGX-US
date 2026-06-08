@@ -1,5 +1,5 @@
 """
-HC15 AutoTrader — Monthly Rebalance Reminder Email
+RodPicks AutoTrader — Monthly Rebalance Reminder Email
 ====================================================
 Sends an email the day before the 1st to remind you to:
   1. Launch Moomoo OpenD (desktop app)
@@ -8,8 +8,8 @@ Sends an email the day before the 1st to remind you to:
 
 Setup (one-time):
   1. Go to https://myaccount.google.com/apppasswords
-  2. Create an App Password for "HC15 AutoTrader"
-  3. Paste it into GMAIL_APP_PASSWORD below (or set env var HC15_EMAIL_PASS)
+  2. Create an App Password for "RodPicks AutoTrader"
+  3. Paste it into GMAIL_APP_PASSWORD below (or set env var RodPicks_EMAIL_PASS)
 
 Run: python send_reminder.py
 """
@@ -23,7 +23,7 @@ from email.mime.text import MIMEText
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 GMAIL_ADDRESS   = "tayboonhao@gmail.com"
-GMAIL_APP_PASSWORD = os.environ.get("HC15_EMAIL_PASS", "your-app-password-here")
+GMAIL_APP_PASSWORD = os.environ.get("RodPicks_EMAIL_PASS", "your-app-password-here")
 TO_ADDRESS      = "tayboonhao@gmail.com"
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -44,11 +44,11 @@ def send_reminder():
     rebalance_date = get_next_rebalance_date()
     day_str = rebalance_date.strftime("%d %b %Y")
 
-    subject = f"⏰ HC15 AutoTrader: Rebalance Tomorrow ({day_str})"
+    subject = f"⏰ RodPicks AutoTrader: Rebalance Tomorrow ({day_str})"
 
     body_html = f"""
     <html><body style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
-    <h2 style="color: #1a6fbf;">HC15 AutoTrader — Monthly Rebalance Tomorrow</h2>
+    <h2 style="color: #1a6fbf;">RodPicks AutoTrader — Monthly Rebalance Tomorrow</h2>
     <p>Your automated trading system will rebalance on <strong>{day_str}</strong>.</p>
 
     <h3>✅ Checklist for tonight / tomorrow morning:</h3>
@@ -86,8 +86,8 @@ def send_reminder():
     </table>
 
     <p style="margin-top: 20px; color: #888; font-size: 12px;">
-      This reminder was sent automatically by HC15 AutoTrader.<br>
-      To check today's signal picks: <code>python hc15_autotrader.py --rebalance --dry</code>
+      This reminder was sent automatically by RodPicks AutoTrader.<br>
+      To check today's signal picks: <code>python rodpicks_autotrader.py --rebalance --dry</code>
     </p>
     </body></html>
     """

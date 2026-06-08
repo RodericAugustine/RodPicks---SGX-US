@@ -1,4 +1,4 @@
-# HC15 AutoTrader — System Summary
+# RodPicks AutoTrader — System Summary
 
 ---
 
@@ -20,12 +20,12 @@ A fully automated monthly rebalancing system that trades SGX (Singapore) and US 
 ## Monthly Cycle (runs on the 1st of every month)
 
 ### Step 1 — Signal Preview (8:00am SGT)
-`python hc15_autotrader.py --rebalance --dry`
+`python rodpicks_autotrader.py --rebalance --dry`
 
 Dry run: scores and ranks stocks for both markets, prints the picks and estimated order sizes. No orders placed. Gives you visibility before live execution.
 
 ### Step 2 — SGX Rebalance (9:05am SGT)
-`python hc15_autotrader.py --rebalance --market SGX`
+`python rodpicks_autotrader.py --rebalance --market SGX`
 
 - Sells all existing SGX positions
 - Immediately buys the new top 3 SGX picks
@@ -33,7 +33,7 @@ Dry run: scores and ranks stocks for both markets, prints the picks and estimate
 - Settlement: T+2, but margin account bridges the gap so sell proceeds fund the buys same day
 
 ### Step 3 — US Rebalance (9:35pm SGT = 9:35am EST)
-`python hc15_autotrader.py --rebalance --market US`
+`python rodpicks_autotrader.py --rebalance --market US`
 
 - Sells all existing US positions
 - Immediately buys the new top 5 US picks
@@ -63,9 +63,9 @@ The system always executes. If sale proceeds + existing cash don't fully cover t
 
 | File | Purpose |
 |------|---------|
-| `hc15_autotrader.py` | Main script — scoring, order execution, backtest |
-| `hc15sg_v2.py` | SGX signal generator → `dashboard_SG.html` |
-| `hc15us_v1.py` | US signal generator → `dashboard_us.html` |
+| `rodpicks_autotrader.py` | Main script — scoring, order execution, backtest |
+| `rodpickssg_v2.py` | SGX signal generator → `dashboard_SG.html` |
+| `rodpicksus_v1.py` | US signal generator → `dashboard_us.html` |
 | `send_reminder.py` | Monthly email reminder |
 | `setup_autotrader.ps1` | Registers all 4 tasks in Windows Task Scheduler (run as Admin) |
 | `backtest_3m.py` | Standalone 3-month backtest script |
@@ -75,14 +75,14 @@ The system always executes. If sale proceeds + existing cash don't fully cover t
 
 ---
 
-## Scheduled Tasks (Task Scheduler → \HC15\)
+## Scheduled Tasks (Task Scheduler → \RodPicks\)
 
 | Task | Day | Time (SGT) | Action |
 |------|-----|------------|--------|
-| HC15-Reminder | 28th* | 9:00am | Email reminder (only sends if tomorrow = 1st) |
-| HC15-Signal | 1st | 8:00am | Dry run preview |
-| HC15-SGX-Trade | 1st | 9:05am | Rebalance SGX |
-| HC15-US-Trade | 1st | 9:35pm | Rebalance US |
+| RodPicks-Reminder | 28th* | 9:00am | Email reminder (only sends if tomorrow = 1st) |
+| RodPicks-Signal | 1st | 8:00am | Dry run preview |
+| RodPicks-SGX-Trade | 1st | 9:05am | Rebalance SGX |
+| RodPicks-US-Trade | 1st | 9:35pm | Rebalance US |
 
 *Fires on 28th but script self-checks — email only goes out on the actual last day of the month.
 
@@ -138,7 +138,7 @@ Since sell proceeds settle T+2 (SGX) and T+1 (US), but the new buys happen the s
 3. Set Gmail App Password for reminder emails:
    - Visit https://myaccount.google.com/apppasswords
    - Create password → copy it
-   - Run in PowerShell: `[System.Environment]::SetEnvironmentVariable('HC15_EMAIL_PASS','your-password','User')`
+   - Run in PowerShell: `[System.Environment]::SetEnvironmentVariable('RodPicks_EMAIL_PASS','your-password','User')`
 4. Run `setup_autotrader.ps1` as Administrator to register all 4 scheduled tasks
-5. Test: `python hc15_autotrader.py --rebalance --dry`
+5. Test: `python rodpicks_autotrader.py --rebalance --dry`
 6. Test: `python send_reminder.py` (only sends email if today is the last day of the month)

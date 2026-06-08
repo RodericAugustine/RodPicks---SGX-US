@@ -1,14 +1,14 @@
 import os, smtplib
 from email.mime.text import MIMEText
 
-pw = os.environ.get("HC15_EMAIL_PASS", "")
+pw = os.environ.get("RodPicks_EMAIL_PASS", "")
 if not pw:
-    print("❌ HC15_EMAIL_PASS env variable not set.")
-    print("   Run: [System.Environment]::SetEnvironmentVariable('HC15_EMAIL_PASS','your-app-password','User')")
+    print("❌ RodPicks_EMAIL_PASS env variable not set.")
+    print("   Run: [System.Environment]::SetEnvironmentVariable('RodPicks_EMAIL_PASS','your-app-password','User')")
 else:
     try:
-        msg = MIMEText("Test from HC15 AutoTrader — email reminder is working!")
-        msg["Subject"] = "HC15 Connection Test ✅"
+        msg = MIMEText("Test from RodPicks AutoTrader — email reminder is working!")
+        msg["Subject"] = "RodPicks Connection Test ✅"
         msg["From"]    = "tayboonhao@gmail.com"
         msg["To"]      = "tayboonhao@gmail.com"
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
