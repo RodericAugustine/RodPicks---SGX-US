@@ -623,7 +623,7 @@ Option A — Windows Task Scheduler (simplest)
   2. Trigger: Monthly, on the 1st at 8:00 AM
   3. Action: Start a program
      Program: python
-     Arguments: C:\\Users\\vibra\\Claude\\Projects\\iNVESTMENT\\rodpickssg_v2.py
+     Arguments: <path-to-repo>\\rodpickssg_v2.py
   4. Save. It will run automatically and update dashboard_SG.html each month.
 
 Option B — Run manually each month (recommended for now)

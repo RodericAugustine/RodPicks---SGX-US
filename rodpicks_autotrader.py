@@ -6,8 +6,8 @@ SGX rebalances at 9:05am SGT (market open). US rebalances at 9:35pm SGT (US mark
 If 1st falls on weekend or public holiday, shifts to next trading day.
 
 Capital:
-  SGX: S$40,000 (USD auto-converts to SGD) — top 3 picks, ~S$13,333 each
-  US:  US$40,000 (USD used directly) — top 5 picks, ~US$8,000 each
+  SGX: S$<YOUR_SGX_CAPITAL> — top 3 picks
+  US:  US$<YOUR_US_CAPITAL> — top 5 picks
 
 Margin: always executes; notifies if shortfall exists.
 
@@ -37,8 +37,8 @@ warnings.filterwarnings("ignore")
 # ── Config ────────────────────────────────────────────────────────────────────
 OPEND_HOST      = "127.0.0.1"
 OPEND_PORT      = 11111
-SGX_CAPITAL     = 40_000     # S$ for SGX strategy
-US_CAPITAL      = 40_000     # US$ for US strategy
+SGX_CAPITAL     = 40_000     # TODO: set your SGX capital (S$)
+US_CAPITAL      = 40_000     # TODO: set your US capital (US$)
 SGX_COMMISSION  = 0.002      # 0.2% per side
 US_COMMISSION   = 0.001      # 0.1% per side
 MARGIN_BUFFER   = 0.10       # allow up to 10% shortfall on margin

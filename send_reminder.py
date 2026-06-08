@@ -22,9 +22,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # ── Config ─────────────────────────────────────────────────────────────────────
-GMAIL_ADDRESS   = "tayboonhao@gmail.com"
+GMAIL_ADDRESS   = "YOUR_EMAIL@gmail.com"
 GMAIL_APP_PASSWORD = os.environ.get("RodPicks_EMAIL_PASS", "your-app-password-here")
-TO_ADDRESS      = "tayboonhao@gmail.com"
+TO_ADDRESS      = "YOUR_EMAIL@gmail.com"
 # ──────────────────────────────────────────────────────────────────────────────
 
 def tomorrow_is_first() -> bool:
@@ -59,8 +59,8 @@ def send_reminder():
       <li><strong>Check internet connection</strong> — a stable connection is needed for order execution</li>
       <li><strong>Confirm capital balances</strong>:
         <ul>
-          <li>SGX account: S$35,000 available</li>
-          <li>US account: US$40,000 available</li>
+          <li>SGX account: sufficient balance available</li>
+          <li>US account: sufficient balance available</li>
         </ul>
       </li>
     </ol>
@@ -77,11 +77,11 @@ def send_reminder():
       </tr>
       <tr style="background: #f9f9f9;">
         <td style="padding: 8px; border: 1px solid #ccc;">9:05 AM</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">SGX rebalance — sell existing + buy top 3 picks (S$35,000)</td>
+        <td style="padding: 8px; border: 1px solid #ccc;">SGX rebalance — sell existing + buy top 3 picks (configured capital)</td>
       </tr>
       <tr>
         <td style="padding: 8px; border: 1px solid #ccc;">9:35 PM</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">US rebalance — sell existing + buy top 5 picks (US$40,000)</td>
+        <td style="padding: 8px; border: 1px solid #ccc;">US rebalance — sell existing + buy top 5 picks (configured capital)</td>
       </tr>
     </table>
 

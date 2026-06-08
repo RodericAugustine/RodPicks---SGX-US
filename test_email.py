@@ -9,12 +9,12 @@ else:
     try:
         msg = MIMEText("Test from RodPicks AutoTrader — email reminder is working!")
         msg["Subject"] = "RodPicks Connection Test ✅"
-        msg["From"]    = "tayboonhao@gmail.com"
-        msg["To"]      = "tayboonhao@gmail.com"
+        msg["From"]    = "YOUR_EMAIL@gmail.com"
+        msg["To"]      = "YOUR_EMAIL@gmail.com"
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
-            s.login("tayboonhao@gmail.com", pw)
-            s.sendmail("tayboonhao@gmail.com", "tayboonhao@gmail.com", msg.as_string())
-        print("✅ Email sent — check your inbox at tayboonhao@gmail.com")
+            s.login("YOUR_EMAIL@gmail.com", pw)
+            s.sendmail("YOUR_EMAIL@gmail.com", "YOUR_EMAIL@gmail.com", msg.as_string())
+        print("✅ Email sent — check your inbox at YOUR_EMAIL@gmail.com")
     except smtplib.SMTPAuthenticationError:
         print("❌ Authentication failed — App Password is wrong or not set up.")
         print("   Go to: https://myaccount.google.com/apppasswords")

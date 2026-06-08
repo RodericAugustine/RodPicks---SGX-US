@@ -9,7 +9,7 @@ Scores stocks monthly using:
 - **ROE** — 10% weight
 - **Free Cash Flow** — 10% weight
 
-Buys the top 3 SGX picks (S$40,000) and top 5 US picks (US$40,000) on the 1st of each month. Fully replaces the portfolio each month.
+Buys the top 3 SGX picks (S$<YOUR_CAPITAL>) and top 5 US picks (US$<YOUR_CAPITAL>) on the 1st of each month. Fully replaces the portfolio each month.
 
 ## Schedule
 
@@ -69,8 +69,8 @@ python rodpicks_autotrader.py --rebalance --dry
 
 | Market | Capital | Picks | Per Stock |
 |--------|---------|-------|-----------|
-| SGX | S$40,000 | Top 3 | ~S$13,333 |
-| US | US$40,000 | Top 5 | ~US$8,000 |
+| SGX | S$<YOUR_CAPITAL> | Top 3 | ~equal split |
+| US | US$<YOUR_CAPITAL> | Top 5 | ~equal split |
 
 SGX trades fund via USD auto-conversion. Ensure sufficient USD balance before the 1st.
 

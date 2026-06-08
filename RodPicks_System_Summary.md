@@ -12,8 +12,8 @@ A fully automated monthly rebalancing system that trades SGX (Singapore) and US 
 
 | Market | Capital | Picks | Per Stock |
 |--------|---------|-------|-----------|
-| SGX    | S$40,000 | Top 3 | ~S$13,333 |
-| US     | US$40,000 | Top 5 | ~US$8,000 |
+| SGX    | S$<YOUR_CAPITAL> | Top 3 | ~equal split |
+| US     | US$<YOUR_CAPITAL> | Top 5 | ~equal split |
 
 ---
 
@@ -43,7 +43,7 @@ Dry run: scores and ranks stocks for both markets, prints the picks and estimate
 `python send_reminder.py`
 
 - Script checks if tomorrow is the 1st — if not, exits silently
-- If yes, sends an HTML email to tayboonhao@gmail.com with:
+- If yes, sends an HTML email to YOUR_EMAIL@gmail.com with:
   - Checklist: launch Moomoo OpenD, log in, keep PC on overnight
   - Day's schedule: 8am signal, 9:05am SGX trade, 9:35pm US trade
   - Capital balances to confirm
@@ -118,8 +118,8 @@ Pure momentum can pick up speculative stocks with no earnings. ROE and FCF act a
 
 ### Selection
 
-- Top 3 SGX scorers → equal-weight allocation of S$40,000 ÷ 3
-- Top 5 US scorers → equal-weight allocation of US$40,000 ÷ 5
+- Top 3 SGX scorers → equal-weight allocation of S$<YOUR_CAPITAL> ÷ 3
+- Top 5 US scorers → equal-weight allocation of US$<YOUR_CAPITAL> ÷ 5
 
 ### Rebalance Logic
 
