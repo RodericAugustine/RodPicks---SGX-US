@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HC15-SG — SGX Monthly Signal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          background: #0f1117; color: #e2e8f0; min-height: 100vh; padding: 24px; }
+  h1   { font-size: 1.6rem; font-weight: 700; color: #fff; }
+  .sub { color: #64748b; font-size: 0.85rem; margin-top: 4px; }
+  header { display:flex; justify-content:space-between; align-items:flex-start;
+            border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 24px; }
+  .badge { background:#1e3a5f; color:#60a5fa; padding:4px 10px;
+            border-radius:99px; font-size:0.75rem; font-weight:600; }
+
+  .section-title { font-size:0.7rem; font-weight:700; letter-spacing:.1em;
+                    text-transform:uppercase; color:#64748b; margin-bottom:12px; }
+
+  /* Cards */
+  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+            gap:16px; margin-bottom:32px; }
+  .card  { background:#1e293b; border-radius:12px; padding:18px;
+            border:1px solid #334155; }
+  .rank  { font-size:0.7rem; color:#64748b; font-weight:600; }
+  .ticker{ font-size:1.5rem; font-weight:800; color:#60a5fa; margin:2px 0; }
+  .name  { font-size:0.75rem; color:#94a3b8; margin-bottom:8px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .price { font-size:1.1rem; font-weight:700; color:#f1f5f9; margin-bottom:10px; }
+  .score-bar-wrap { background:#0f1117; border-radius:99px; height:6px; margin-bottom:4px; }
+  .score-bar { background:linear-gradient(90deg,#3b82f6,#06b6d4);
+                border-radius:99px; height:6px; }
+  .score-label { font-size:0.7rem; color:#64748b; margin-bottom:10px; }
+  .factors { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+  .tag { font-size:0.65rem; font-weight:700; padding:2px 7px;
+          border-radius:99px; }
+  .green  { background:#14532d; color:#4ade80; }
+  .red    { background:#450a0a; color:#f87171; }
+  .neutral{ background:#1e3a5f; color:#93c5fd; }
+  .action { font-size:0.7rem; font-weight:700; color:#a3e635;
+             background:#1a2e05; padding:5px 10px; border-radius:6px;
+             text-align:center; }
+
+  /* Weights */
+  .weights { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px; }
+  .w-item  { background:#1e293b; border:1px solid #334155; border-radius:8px;
+              padding:10px 14px; text-align:center; }
+  .w-label { font-size:0.65rem; color:#64748b; }
+  .w-val   { font-size:1rem; font-weight:700; color:#60a5fa; }
+
+  /* History */
+  table { width:100%; border-collapse:collapse; }
+  th { font-size:0.7rem; color:#64748b; text-align:left; padding:8px 12px;
+        border-bottom:1px solid #1e293b; text-transform:uppercase; }
+  td { font-size:0.8rem; padding:8px 12px; border-bottom:1px solid #1e293b; color:#cbd5e1; }
+  tr:hover td { background:#1e293b; }
+
+  .note { background:#1e2d1e; border:1px solid #166534; border-radius:8px;
+           padding:12px 16px; font-size:0.75rem; color:#86efac; margin-bottom:24px; }
+  footer { color:#475569; font-size:0.7rem; margin-top:32px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>HC15-SG v2 &nbsp; SGX Monthly Signal</h1>
+    <p class="sub">Price Appreciation Strategy &nbsp;·&nbsp; Generated 2026-06-05 00:51</p>
+  </div>
+  <span class="badge">Signal Date: 2026-06-05</span>
+</header>
+
+<div class="note">
+  ⚠ &nbsp;Fundamental data (ROE, FCF) is current, not historical.
+  Momentum factors are live from yfinance. Re-run this script on the
+  <strong>1st trading day of each month</strong> for updated picks.
+  Not financial advice.
+</div>
+
+<p class="section-title">Factor Weights</p>
+<div class="weights">
+  <div class="w-item"><div class="w-label">1-Month Momentum</div><div class="w-val">20%</div></div>
+  <div class="w-item"><div class="w-label">3-Month Momentum</div><div class="w-val">35%</div></div>
+  <div class="w-item"><div class="w-label">6-Month Momentum</div><div class="w-val">25%</div></div>
+  <div class="w-item"><div class="w-label">Return on Equity</div><div class="w-val">10%</div></div>
+  <div class="w-item"><div class="w-label">FCF Yield</div><div class="w-val">10%</div></div>
+</div>
+
+<p class="section-title">This Month's Top 3 — Action: Buy Equal Weight (33% each)</p>
+<div class="cards">
+
+        <div class="card">
+          <div class="rank">#1</div>
+          <div class="ticker">AWX</div>
+          <div class="name">AEM Holdings Ltd.</div>
+          <div class="price">S$10.09</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" style="width:83%"></div>
+          </div>
+          <div class="score-label">Score: 0.834</div>
+          <div class="factors">
+            <span class="tag green">1m +36.2%</span>
+            <span class="tag green">3m +224.0%</span>
+            <span class="tag green">6m +505.3%</span>
+            <span class="tag neutral">ROE 5.6%</span>
+            <span class="tag neutral">FCF +2.4%</span>
+          </div>
+          <div class="action">BUY — Equal weight (33% each)</div>
+        </div>
+        <div class="card">
+          <div class="rank">#2</div>
+          <div class="ticker">Y92</div>
+          <div class="name">Thai Beverage Public Company Limited</div>
+          <div class="price">S$0.43</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" style="width:40%"></div>
+          </div>
+          <div class="score-label">Score: 0.409</div>
+          <div class="factors">
+            <span class="tag green">1m +49.2%</span>
+            <span class="tag green">3m +45.8%</span>
+            <span class="tag green">6m +43.7%</span>
+            <span class="tag neutral">ROE 14.3%</span>
+            <span class="tag neutral">FCF +2.4%</span>
+          </div>
+          <div class="action">BUY — Equal weight (33% each)</div>
+        </div>
+        <div class="card">
+          <div class="rank">#3</div>
+          <div class="ticker">S68</div>
+          <div class="name">Singapore Exchange Limited</div>
+          <div class="price">S$22.31</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" style="width:26%"></div>
+          </div>
+          <div class="score-label">Score: 0.266</div>
+          <div class="factors">
+            <span class="tag green">1m +5.0%</span>
+            <span class="tag green">3m +26.2%</span>
+            <span class="tag green">6m +34.4%</span>
+            <span class="tag neutral">ROE 30.1%</span>
+            <span class="tag neutral">FCF +2.1%</span>
+          </div>
+          <div class="action">BUY — Equal weight (33% each)</div>
+        </div>
+</div>
+
+<p class="section-title">Pick History (last 12 months)</p>
+<table>
+  <thead><tr><th>Month</th><th>Top 3 Picks</th></tr></thead>
+  <tbody><tr><td>2026-06-04</td><td>AWX, Y92, S68</td></tr>
+</tbody>
+</table>
+
+<footer style="margin-top:24px">
+  HC15-SG v2 &nbsp;·&nbsp; SGX Price Strategy &nbsp;·&nbsp; Data: yfinance &nbsp;·&nbsp;
+  Not financial advice. Always do your own research.
+</footer>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Output files
+*.json
+*.html
+
+# Keep dashboard files
+!dashboard_SG.html
+!dashboard_us.html
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+*.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
