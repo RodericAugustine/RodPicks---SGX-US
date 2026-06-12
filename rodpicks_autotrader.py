@@ -52,6 +52,7 @@ SGX_CAPITAL     = 40_000     # TODO: set your SGX capital (S$)
 US_CAPITAL      = 40_000     # TODO: set your US capital (US$)
 SGX_COMMISSION  = 0.002      # 0.2% per side
 US_COMMISSION   = 0.001      # 0.1% per side
+MAX_MOM_6M      = 1.50       # exclude tickers with 6m momentum > 150% (post-spike trap filter)
 MARGIN_BUFFER   = 0.10       # allow up to 10% shortfall on margin
 LOT_SIZE        = 100        # SGX lot size
 SGD_USD_RATE    = 0.74       # approx rate for display only
@@ -245,6 +246,7 @@ def score_stocks(tickers, prices, fundamentals, top_n):
         roe = fd.get("roe")
         fcf = fd.get("fcf")
         if sum(x is not None for x in [m1,m3,m6,roe,fcf]) < 2: continue
+        if m6 is not None and m6 > MAX_MOM_6M: continue  # post-spike trap filter
         rows.append({"ticker":t,"name":fd.get("name",t),
                      "price":float(col.iloc[-1]),
                      "m1":m1,"m3":m3,"m6":m6,"roe":roe,"fcf":fcf})
@@ -826,4 +828,24 @@ def run_backtest(start_str: str, end_str: str, capital_sgx=None, capital_us=None
 if __name__ == "__main__":
     # ── Mode banner — shown every run so you always know which env is active ──
     if TRADE_ENV == TrdEnv.REAL:
-      
+        print("\n" + "⚠️  " * 18)
+        print("  🔴  LIVE MODE — REAL ORDERS WILL BE PLACED  🔴")
+        print("      Set RODPICKS_LIVE=1 is active.")
+        print("      To switch to paper: unset RODPICKS_LIVE or set it to anything other than '1'")
+        print("⚠️  " * 18 + "\n")
+    else:
+        print("\n✅  PAPER MODE (SIMULATE) — no real orders. Set RODPICKS_LIVE=1 to go live.\n")
+
+    p = argparse.ArgumentParser(description="RodPicks AutoTrader")
+    p.add_argument("--rebalance", action="store_true", help="Close existing + open new picks (monthly 1st)")
+    p.add_argument("--market",    type=str, default="BOTH", choices=["SGX","US","BOTH"],
+                   help="Which market to act on (default: BOTH)")
+    p.add_argument("--status",    action="store_true", help="Show current holdings")
+    p.add_argument("--dry",       action="store_true", help="Preview only, no orders placed")
+    p.add_argument("--backtest",  action="store_true", help="Run backtest")
+    p.add_argument("--start",     type=str, default="2026-01-01", help="Backtest open date")
+    p.add_argument("--end",       type=str, default="2026-01-31", help="Backtest close date")
+    args = p.parse_args()
+
+    if args.backtest:
+        run_backtest(args.start, 

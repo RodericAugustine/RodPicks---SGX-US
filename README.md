@@ -77,4 +77,5 @@ SGX trades fund via USD auto-conversion. Ensure sufficient USD balance before th
 
 ## Notes
 - Paper trading: change `TrdEnv.REAL` to `TrdEnv.SIMULATE` in `rodpicks_autotrader.py`
-- SGX lot size: flo
+- SGX lot size: floored to nearest 100 shares
+- Margin account bridges T+1/T+2 settlement gap on rebalance day

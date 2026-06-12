@@ -21,4 +21,5 @@ else:
     except smtplib.SMTPAuthenticationError:
         print("❌ Authentication failed — App Password is wrong or not set up.")
         print("   Go to: https://myaccount.google.com/apppasswords")
-    except Excep
+    except Exception as e:
+        print(f"❌ Error: {e}")
